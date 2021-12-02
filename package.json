@@ -1,6 +1,6 @@
 {
   "name": "@springio/utils",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Utilities for Spring documentation and websites",
   "main": "index.js",
   "scripts": {

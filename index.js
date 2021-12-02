@@ -67,7 +67,7 @@ function globalSwitch() {
 	document.querySelectorAll(".switch--item").forEach(function(item) {
 		var blockId = blockIdForSwitchItem(item);
 		var handler = function(event) {
-			selectedText = event.target.textContent;
+			var selectedText = event.target.textContent;
 			window.localStorage.setItem(blockId, selectedText);
 			for (var switchItem of document.querySelectorAll(".switch--item")) {
 				if (blockIdForSwitchItem(switchItem) === blockId && switchItem.textContent === selectedText) {
@@ -100,7 +100,7 @@ function select(selected) {
 }
 
 function blockIdForSwitchItem(item) {
-	idComponents = []
+	var idComponents = []
 	for (var switchItem of item.parentNode.querySelectorAll(".switch--item")) {
 		idComponents.push(switchItem.textContent.toLowerCase());
 	}
