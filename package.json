@@ -1,8 +1,9 @@
 {
     "name": "@springio/utils",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Utilities for Spring documentation and websites",
     "main": "index.js",
+    "style": "style.css",
     "scripts": {},
     "repository": {
         "type": "git",
