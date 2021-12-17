@@ -14,24 +14,21 @@
  * limitations under the License.
  */
 
-(function() {
-    "use strict";
+class BlockSwitch {
 
-    window.addEventListener("load", onWindowLoad);
-
-    function addBlockSwitches() {
+    addBlockSwitches() {
         for (var primary of document.querySelectorAll(".primary")) {
-            var switchItem = createSwitchItem(primary, createBlockSwitch(primary));
+            var switchItem = this.createSwitchItem(primary, this.createBlockSwitch(primary));
             switchItem.item.classList.add("selected");
             var title = primary.querySelector(".title");
             title.remove();
         }
         for (var secondary of document.querySelectorAll(".secondary")) {
-            var primary = findPrimary(secondary);
+            var primary = this.findPrimary(secondary);
             if (primary === null) {
                 console.error("Found secondary block with no primary sibling");
             } else {
-                var switchItem = createSwitchItem(
+                var switchItem = this.createSwitchItem(
                     secondary,
                     primary.querySelector(".switch")
                 );
@@ -42,19 +39,19 @@
         }
     }
 
-    function createElementFromHtml(html) {
+    createElementFromHtml(html) {
         var template = document.createElement("template");
         template.innerHTML = html;
         return template.content.firstChild;
     }
 
-    function createBlockSwitch(primary) {
-        var blockSwitch = createElementFromHtml('<div class="switch"></div>');
+    createBlockSwitch(primary) {
+        var blockSwitch = this.createElementFromHtml('<div class="switch"></div>');
         primary.prepend(blockSwitch);
         return blockSwitch;
     }
 
-    function findPrimary(secondary) {
+    findPrimary(secondary) {
         var candidate = secondary.previousElementSibling;
         while (candidate != null && !candidate.classList.contains("primary")) {
             candidate = candidate.previousElementSibling;
@@ -62,14 +59,14 @@
         return candidate;
     }
 
-    function createSwitchItem(block, blockSwitch) {
+    createSwitchItem(block, blockSwitch) {
         var blockName = block.querySelector(".title").textContent;
         var content = block.querySelectorAll(".content").item(0);
-        var colist = nextSibling(block, ".colist");
+        var colist = this.nextSibling(block, ".colist");
         if (colist != null) {
             content.append(colist);
         }
-        var item = createElementFromHtml(
+        var item = this.createElementFromHtml(
             '<div class="switch--item">' + blockName + "</div>"
         );
         item.dataset.blockName = blockName;
@@ -78,7 +75,7 @@
         return { item: item, content: content };
     }
 
-    function nextSibling(element, selector) {
+    nextSibling(element, selector) {
         var sibling = element.nextElementSibling;
         while (sibling) {
             if (sibling.matches(selector)) {
@@ -88,29 +85,30 @@
         }
     }
 
-    function globalSwitch() {
-        document.querySelectorAll(".switch--item").forEach(function(item) {
-            var blockId = blockIdForSwitchItem(item);
+    globalSwitch() {
+        const blocks = this;
+        document.querySelectorAll(".switch--item").forEach(item => {
+            var blockId = blocks.blockIdForSwitchItem(item);
             var handler = function(event) {
                 var selectedText = event.target.textContent;
                 window.localStorage.setItem(blockId, selectedText);
                 for (var switchItem of document.querySelectorAll(".switch--item")) {
                     if (
-                        blockIdForSwitchItem(switchItem) === blockId &&
+                        blocks.blockIdForSwitchItem(switchItem) === blockId &&
                         switchItem.textContent === selectedText
                     ) {
-                        select(switchItem);
+                        blocks.select(switchItem);
                     }
                 }
             };
             item.addEventListener("click", handler);
             if (item.textContent === window.localStorage.getItem(blockId)) {
-                select(item);
+                blocks.select(item);
             }
         });
     }
 
-    function select(selected) {
+    select(selected) {
         for (var child of selected.parentNode.children) {
             child.classList.remove("selected");
         }
@@ -126,7 +124,7 @@
         }
     }
 
-    function blockIdForSwitchItem(item) {
+    blockIdForSwitchItem(item) {
         var idComponents = [];
         for (var switchItem of item.parentNode.querySelectorAll(".switch--item")) {
             idComponents.push(switchItem.textContent.toLowerCase());
@@ -134,8 +132,16 @@
         return idComponents.sort().join("-");
     }
 
-    function onWindowLoad() {
-        addBlockSwitches();
-        globalSwitch();
-    };
-})();
+    static onWindowLoad() {
+        if (document) {
+            const blocks = new BlockSwitch();
+            blocks.addBlockSwitches();
+            blocks.globalSwitch();
+        }
+    }
+
+};
+
+window.addEventListener("load", BlockSwitch.onWindowLoad);
+
+export {};
