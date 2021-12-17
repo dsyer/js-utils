@@ -4,7 +4,7 @@ Javascript library with utilities for [Spring](https://spring.io) documentation 
 
 ```
 <link rel="stylesheet" type="text/css" href="https://unpkg.com/@springio/utils/style.css" />
-<script async src="https://unpkg.com/@springio/utils/index.js"></script>
+<script async src="https://unpkg.com/@springio/utils"></script>
 ```
 
 ## Block Switcher
