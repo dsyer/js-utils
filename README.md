@@ -1,10 +1,22 @@
-Javascript library with utilities for [Spring](https://spring.io) documentation and websites.
+Javascript library (ESM module) with utilities for [Spring](https://spring.io) documentation and websites.
 
 ## Usage
 
 ```
 <link rel="stylesheet" type="text/css" href="https://unpkg.com/@springio/utils/style.css" />
 <script async src="https://unpkg.com/@springio/utils"></script>
+```
+
+or
+
+```
+<link rel="stylesheet" type="text/css" href="https://unpkg.com/@springio/utils/style.css" />
+<script type="modulemap">
+  "@springio/utils": "https://unpkg.com/@springio/utils"
+</script>
+<script type="module">
+import '@springio/utils';
+</script>
 ```
 
 ## Block Switcher
